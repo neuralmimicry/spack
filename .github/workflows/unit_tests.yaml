@@ -13,7 +13,7 @@ jobs:
   # Validate that the code can be run on all the Python versions
   # supported by Spack
   validate:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
@@ -29,7 +29,7 @@ jobs:
       run: vermin --backport argparse --violations --backport typing -t=2.6- -t=3.5- -vvv var/spack/repos
   # Run style checks on the files that have been changed
   style:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     steps:
     - uses: actions/checkout@v2
       with:
@@ -50,7 +50,7 @@ jobs:
           share/spack/qa/run-style-tests
   # Build the documentation
   documentation:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
@@ -70,7 +70,7 @@ jobs:
 
   # Check which files have been updated by the PR
   changes:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     # Set job outputs to values from filter step
     outputs:
       core: ${{ steps.filter.outputs.core }}
@@ -113,7 +113,7 @@ jobs:
   # Run unit tests with different configurations on linux
   unittests:
     needs: [ validate, style, documentation, changes ]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     strategy:
       matrix:
         python-version: [2.7, 3.5, 3.6, 3.7, 3.8, 3.9]
@@ -187,7 +187,7 @@ jobs:
   # Test shell integration
   shell:
     needs: [ validate, style, documentation, changes ]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     steps:
     - uses: actions/checkout@v2
       with:
@@ -239,7 +239,7 @@ jobs:
   # Test for Python2.6 run on Centos 6
   centos6:
     needs: [ validate, style, documentation, changes ]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     container: spack/github-actions:centos6
     steps:
     - name: Run unit tests (full test-suite)
@@ -270,7 +270,7 @@ jobs:
   # only on PRs modifying core Spack
   rhel8-platform-python:
     needs: [ validate, style, documentation, changes ]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     if: ${{ needs.changes.outputs.with_coverage == 'true' }}
     container: registry.access.redhat.com/ubi8/ubi
     steps:
@@ -295,7 +295,7 @@ jobs:
   # Test for the clingo based solver (using clingo-cffi)
   clingo-cffi:
     needs: [ validate, style, documentation, changes ]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     steps:
     - uses: actions/checkout@v2
       with:
